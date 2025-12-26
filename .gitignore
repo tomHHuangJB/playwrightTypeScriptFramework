@@ -1,1 +1,9 @@
 doc/
+AGENTS.md
+node_modules/
+test-results/
+playwright-report/
+*.log
+.local-automation-pids
+local_automation_app_ci
+local_automation_app_ci.pub

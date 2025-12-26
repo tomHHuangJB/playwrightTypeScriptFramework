@@ -14,6 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Checkout LocalAutomationApp
+        uses: actions/checkout@v4
+        with:
+          repository: tomHHuangJB/LocalAutomationApp
+          ssh-key: ${{ secrets.LOCAL_AUTOMATION_APP_SSH_KEY }}
+          path: LocalAutomationApp
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -25,7 +32,45 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Install LocalAutomationApp backend deps
+        working-directory: LocalAutomationApp/backend
+        run: npm ci
+
+      - name: Build LocalAutomationApp backend
+        working-directory: LocalAutomationApp/backend
+        run: npm run build
+
+      - name: Install LocalAutomationApp frontend deps
+        working-directory: LocalAutomationApp/frontend
+        run: npm ci
+
+      - name: Build LocalAutomationApp frontend
+        working-directory: LocalAutomationApp/frontend
+        run: VITE_API_URL=http://localhost:3001 npm run build
+
+      - name: Start LocalAutomationApp backend
+        working-directory: LocalAutomationApp/backend
+        run: node dist/index.js &
+
+      - name: Start LocalAutomationApp frontend (static)
+        working-directory: LocalAutomationApp/frontend
+        run: npx serve -s dist -l 5173 &
+
+      - name: Wait for app
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://localhost:3001/health >/dev/null && curl -fsS http://localhost:5173 >/dev/null; then
+              echo "App is up";
+              exit 0;
+            fi
+            sleep 2;
+          done
+          echo "App did not start in time";
+          exit 1
+
       - name: Run tests
+        env:
+          BASE_URL: http://localhost:5173
         run: npm test
 
       - name: Upload Playwright Report
