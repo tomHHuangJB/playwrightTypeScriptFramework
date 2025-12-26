@@ -1,0 +1,12 @@
+  {
+    "name": "playwright-typescript-framework",
+    "private": true,
+    "scripts": {
+      "test": "playwright test",
+      "test:smoke": "playwright test --grep @smoke"
+    },
+    "devDependencies": {
+      "@playwright/test": "^1.43.1",
+      "typescript": "^5.3.3"
+    }
+  }
