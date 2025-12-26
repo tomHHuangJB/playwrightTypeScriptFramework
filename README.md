@@ -81,6 +81,15 @@ In `tomHHuangJB/playwrightTypeScriptFramework`:
 rm -f ./local_automation_app_ci ./local_automation_app_ci.pub
 ```
 
+## CI Workflow Details
+- Workflow file: `.github/workflows/ci.yml`.
+- Steps run in CI:
+  - Checkout this repo and `LocalAutomationApp` (via `LOCAL_AUTOMATION_APP_SSH_KEY`).
+  - Build backend + frontend, then start them.
+  - Wait for `http://localhost:3001/health` and `http://localhost:5173`.
+  - Run `npm test` with `BASE_URL=http://localhost:5173`.
+- Playwright report is uploaded as a workflow artifact.
+
 ## Notes
 - CI runs the app and tests with `BASE_URL=http://localhost:5173`.
 - Tests can be skipped in CI by setting `SKIP_UI=true`.
