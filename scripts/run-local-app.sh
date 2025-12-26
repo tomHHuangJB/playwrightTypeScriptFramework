@@ -19,7 +19,11 @@ echo "Starting LocalAutomationApp from: $APP_DIR"
 
 echo "Building and starting backend (CI-aligned)"
 pushd "$APP_DIR/backend" >/dev/null
-npm ci
+if [ -f package-lock.json ]; then
+  npm ci
+else
+  npm install
+fi
 npm run build
 node dist/index.js > "$ROOT_DIR/.local-automation-backend.log" 2>&1 &
 BACKEND_PID=$!
@@ -27,7 +31,11 @@ popd >/dev/null
 
 echo "Building and starting frontend (CI-aligned)"
 pushd "$APP_DIR/frontend" >/dev/null
-npm ci
+if [ -f package-lock.json ]; then
+  npm ci
+else
+  npm install
+fi
 VITE_API_URL="http://localhost:3001" npm run build
 npx serve -s dist -l 5173 > "$ROOT_DIR/.local-automation-frontend.log" 2>&1 &
 FRONTEND_PID=$!

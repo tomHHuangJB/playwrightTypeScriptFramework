@@ -34,7 +34,12 @@ jobs:
 
       - name: Install LocalAutomationApp backend deps
         working-directory: LocalAutomationApp/backend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Build LocalAutomationApp backend
         working-directory: LocalAutomationApp/backend
@@ -42,7 +47,12 @@ jobs:
 
       - name: Install LocalAutomationApp frontend deps
         working-directory: LocalAutomationApp/frontend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Build LocalAutomationApp frontend
         working-directory: LocalAutomationApp/frontend
