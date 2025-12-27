@@ -14,7 +14,8 @@ export class Header {
     }
 
     async navigateToForms() {
-        if (await this.mobileMenuButton.isVisible()) {
+        const viewport = this.page.viewportSize();
+        if (viewport && viewport.width < 1024) {
             await this.mobileMenuButton.click();
             await this.mobileFormsLink.click();
             return;
