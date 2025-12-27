@@ -94,6 +94,18 @@ rm -f ./local_automation_app_ci ./local_automation_app_ci.pub
 - CI runs the app and tests with `BASE_URL=http://localhost:5173`.
 - Tests can be skipped in CI by setting `SKIP_UI=true`.
 
+## Mobile Testing Support
+- Mobile projects are enabled in `playwright.config.ts` (e.g., `Pixel 7`, `iPhone 13`).
+- The app exposes mobile nav locators: `mobile-menu-button` and `mobile-nav-<label>` (for example, `mobile-nav-forms`).
+- The shared `Header` component handles both desktop and mobile navigation by:
+  - Clicking `nav-forms` on desktop.
+  - Opening the mobile menu and clicking `mobile-nav-forms` on mobile.
+
+Run only mobile projects:
+```bash
+npx playwright test --project="Pixel 7" --project="iPhone 13"
+```
+
 ## Daily Run (Local)
 ```bash
 export LOCAL_AUTOMATION_APP_DIR=/Users/tomhuang/prog/LocalAutomationApp
