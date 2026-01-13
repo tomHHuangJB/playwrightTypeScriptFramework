@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh 'node -v'
         sh 'npm ci'
-        sh 'npx playwright install --with-deps'
+        sh 'npx playwright install'
       }
     }
     stage('Run app') {
