@@ -1,13 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 
-   export default defineConfig({
-     testDir: './tests',
-     timeout: 30_000,
-     expect: { timeout: 5_000 },
-     retries: 1,
-     use: {
-       baseURL: process.env.BASE_URL || 'http://localhost:5173',
-       trace: 'on-first-retry',
+export default defineConfig({
+  testDir: './tests',
+  timeout: 30_000,
+  expect: { timeout: 5_000 },
+  retries: 1,
+  reporter: [['html', { open: 'never' }]],
+  outputDir: 'test-results',
+  use: {
+    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    trace: 'on-first-retry',
        screenshot: 'only-on-failure',
        video: 'retain-on-failure'
      },

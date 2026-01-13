@@ -36,7 +36,7 @@ pipeline {
       post {
         always {
           sh 'if [ -f .local-automation-pids ]; then kill $(cat .local-automation-pids) || true; fi'
-          archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+          archiveArtifacts artifacts: 'playwright-report/**,test-results/**', allowEmptyArchive: true
         }
       }
     }
