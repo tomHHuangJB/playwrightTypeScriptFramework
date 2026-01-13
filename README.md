@@ -63,6 +63,7 @@ chmod +x scripts/run-local-app.sh
 npm run app:run
 PLAYWRIGHT_WORKERS=1 npm test
 ```
+`PLAYWRIGHT_WORKERS` overrides Playwright's default worker count when set.
 
 ## CI Setup (Deploy Key)
 
@@ -144,6 +145,7 @@ Or create a local env file (git-ignored) instead of exporting each time:
 cp scripts/jenkins.env.example scripts/jenkins.env
 ```
 Then edit `scripts/jenkins.env` with your Jenkins user + token.
+The post-commit hook requires `scripts/jenkins.env` to be present.
 
 ### 3) Test the hook
 ```bash
