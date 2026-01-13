@@ -13,4 +13,5 @@ test("files upload and download actions", async ({ page }) => {
     await files.downloadCsvFile();
     await files.downloadPdfFile();
     await files.retryDownload();
+    await page.getByTestId("download-resume").click();
 });

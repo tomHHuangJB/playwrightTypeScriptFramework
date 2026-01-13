@@ -11,6 +11,7 @@ test("error states and security labs", async ({ page }) => {
     await expect(errors.partialGood).toBeVisible();
     await expect(errors.partialFail).toBeVisible();
 
+    // Async state change: leak counter increments on an interval.
     await errors.startLeak();
     await expect.poll(async () => (await page.getByText(/Leak size:/).textContent()) ?? "").not.toContain("Leak size: 0");
 

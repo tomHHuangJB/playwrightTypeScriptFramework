@@ -8,8 +8,11 @@ test("dynamic state behaviors", async ({ page }) => {
 
     const before = await dynamic.count();
     await dynamic.clickOptimistic();
-    await expect(dynamic.optimisticStatus).not.toHaveText("saving");
-    await expect.poll(() => dynamic.count()).toBeGreaterThanOrEqual(before);
+    // Async state race: Wait for a terminal state to avoid racing the optimistic update.
+    await expect(dynamic.optimisticStatus).toHaveText(/saved|rollback/);
+    const status = (await dynamic.optimisticStatus.textContent()) ?? "";
+    const expected = status.includes("rollback") ? before : before + 1;
+    await expect.poll(() => dynamic.count()).toBe(expected);
 
     await dynamic.triggerRace();
     await dynamic.triggerDedup();

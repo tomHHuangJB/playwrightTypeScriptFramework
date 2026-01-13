@@ -17,4 +17,9 @@ test("debug panel controls", async ({ page }) => {
 
     await expect(debug.stateViewer).toContainText("offline");
     await expect(debug.stateViewer).toContainText("granted");
+    await expect(page.getByTestId("error-log-viewer")).toBeVisible();
+    await expect(page.getByTestId("api-log-viewer")).toBeVisible();
+    await expect(page.getByTestId("error-log-viewer")).toContainText("No errors logged.");
+    // Environment variance: API log may already contain responses from app boot.
+    await expect(page.getByTestId("api-log-viewer")).toContainText(/No responses logged\.|Recent API Responses/);
 });

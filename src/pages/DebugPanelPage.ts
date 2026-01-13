@@ -22,6 +22,7 @@ export class DebugPanelPage {
     }
 
     async openPanel() {
+        // Input focus/shortcut delivery: ensure focus and add JS fallback for CI/WebKit.
         await this.page.evaluate(() => window.focus());
         await this.page.click("body");
         await this.page.keyboard.press("Alt+Shift+D");

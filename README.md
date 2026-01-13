@@ -50,6 +50,20 @@ kill $(cat .local-automation-pids)
 npm test
 ```
 
+### 4a) First-time Playwright install (local)
+If Playwright was just installed or updated, download browsers once:
+```bash
+npx playwright install
+```
+
+### 4b) Full local run (lightweight)
+```bash
+export LOCAL_AUTOMATION_APP_DIR=/Users/tomhuang/prog/LocalAutomationApp
+chmod +x scripts/run-local-app.sh
+npm run app:run
+PLAYWRIGHT_WORKERS=1 npm test
+```
+
 ## CI Setup (Deploy Key)
 
 GitHub Actions checks out `LocalAutomationApp` using a deploy key.

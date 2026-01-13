@@ -21,6 +21,7 @@ export class AuthPage {
 
     async open() {
         await this.page.goto("/auth");
+        // Render timing: wait for inputs before interacting to avoid race conditions.
         await this.usernameInput.waitFor({ state: "visible" });
     }
 

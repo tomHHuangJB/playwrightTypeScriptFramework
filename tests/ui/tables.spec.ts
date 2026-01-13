@@ -19,4 +19,10 @@ test("table operations", async ({ page }) => {
     await tables.nextCursorPage();
     await tables.nextOffsetPage();
     await tables.exportCsv();
+    await page.getByTestId("cursor-prev").click();
+    await page.getByTestId("sort-desc").click();
+    await page.getByTestId("bulk-archive").click();
+    await page.getByTestId("col-resize").click();
+    await page.getByTestId("col-reorder").click();
+    await page.getByTestId("col-pin").click();
 });

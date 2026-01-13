@@ -63,7 +63,9 @@ export class FormsPage {
         const frame = this.page.frameLocator("[data-testid='rich-text-iframe']");
         const body = frame.locator("body");
         await body.click();
-        await this.page.keyboard.press("Control+A");
+        // Cross-platform input: Use OS-appropriate select-all to avoid flaky input on macOS/WebKit.
+        const selectAll = process.platform === "darwin" ? "Meta+A" : "Control+A";
+        await this.page.keyboard.press(selectAll);
         await this.page.keyboard.type(text);
     }
 
