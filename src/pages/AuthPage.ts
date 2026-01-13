@@ -15,6 +15,7 @@ export class AuthPage {
 
     async open() {
         await this.page.goto("/auth");
+        await this.usernameInput.waitFor({ state: "visible" });
     }
 
     async login(username: string, password: string) {

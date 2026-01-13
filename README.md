@@ -189,3 +189,18 @@ chmod +x scripts/run-local-app.sh
 npm run app:run
 npm test
 ```
+
+## Flaky WebKit login (investigation + fix)
+Symptom: the `@smoke login to dashboard` test occasionally timed out only on WebKit in Jenkins.
+
+Root cause: the test relied on an accessibility role lookup (`role=main`, name "Dashboard")
+as the only readiness signal. In WebKit under parallel CI load, the accessibility tree for the
+home page was sometimes delayed, so the locator did not resolve within the 30s test timeout.
+
+Fix applied:
+- Use a stable, deterministic UI marker (`data-testid="session-state"`) to confirm the
+  dashboard is ready.
+- Ensure the auth page fields are visible before input, so we never race the form render.
+
+Best practice: when an ARIA-based locator is flaky in a specific engine, keep the ARIA usage
+for semantic coverage but anchor the readiness check on a stable test id or functional UI marker.

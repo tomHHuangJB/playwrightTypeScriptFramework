@@ -6,7 +6,7 @@ export class DashboardPage {
 
     constructor(page: Page) {
         this.page = page;
-        this.dashboardRoot = page.getByRole("main", { name: "Dashboard"});
+        this.dashboardRoot = page.getByTestId("session-state");
     }
 
     async isVisible() {
