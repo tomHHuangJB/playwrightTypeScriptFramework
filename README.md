@@ -130,6 +130,26 @@ export JENKINS_PARAMS="BASE_URL=http://localhost:5173"
 git commit --allow-empty -m "test hook"
 ```
 
+## Local Jenkins (Pipeline + file:// repo)
+If Jenkins is running in Docker and you want to use a local `file:///...` repo URL,
+Jenkins requires an explicit flag to allow local checkouts.
+
+Start Jenkins with:
+```bash
+docker run -d \
+  --name jenkins-playwright \
+  -p 9083:8080 \
+  -v "/Users/tomhuang/prog/playwrightTypeScriptFramework/jenkins-home:/var/jenkins_home" \
+  -v "/Users/tomhuang/prog/playwrightTypeScriptFramework:/opt/playwright-repo" \
+  -e JAVA_OPTS='-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true' \
+  jenkins/jenkins:lts-jdk21
+```
+
+Then set the Pipeline SCM repo URL to:
+```
+file:///opt/playwright-repo
+```
+
 ## Mobile Testing Support
 - Mobile projects are enabled in `playwright.config.ts` (e.g., `Pixel 7`, `iPhone 13`).
 - The app exposes mobile nav locators: `mobile-menu-button` and `mobile-nav-<label>` (for example, `mobile-nav-forms`).

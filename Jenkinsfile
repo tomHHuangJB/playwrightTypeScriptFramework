@@ -1,6 +1,11 @@
 pipeline {
   agent any
   stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
     stage('Install deps') {
       steps {
         sh 'npm ci'
@@ -16,12 +21,12 @@ pipeline {
       steps {
         sh 'npm test'
       }
-    }
-  }
-  post {
-    always {
-      sh 'if [ -f .local-automation-pids ]; then kill $(cat .local-automation-pids) || true; fi'
-      archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+      post {
+        always {
+          sh 'if [ -f .local-automation-pids ]; then kill $(cat .local-automation-pids) || true; fi'
+          archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+        }
+      }
     }
   }
 }
