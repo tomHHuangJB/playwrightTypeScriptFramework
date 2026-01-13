@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  tools {
+    nodejs 'node20'
+  }
   stages {
     stage('Checkout') {
       steps {
@@ -8,6 +11,7 @@ pipeline {
     }
     stage('Install deps') {
       steps {
+        sh 'node -v'
         sh 'npm ci'
         sh 'npx playwright install --with-deps'
       }

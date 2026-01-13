@@ -134,8 +134,10 @@ git commit --allow-empty -m "test hook"
 If Jenkins is running in Docker and you want to use a local `file:///...` repo URL,
 Jenkins requires an explicit flag to allow local checkouts.
 
-Start Jenkins with:
+Start Jenkins with (or restart with the same command):
 ```bash
+docker rm -f jenkins-playwright
+
 docker run -d \
   --name jenkins-playwright \
   -p 9083:8080 \
@@ -149,6 +151,14 @@ Then set the Pipeline SCM repo URL to:
 ```
 file:///opt/playwright-repo
 ```
+
+### NodeJS requirement (Jenkins local)
+The Jenkins container does not include Node by default. Install the **NodeJS**
+plugin and create a Node tool named `node20` so the Jenkinsfile can use it.
+
+Steps:
+- Manage Jenkins → Manage Plugins → install **NodeJS**
+- Manage Jenkins → Global Tool Configuration → NodeJS → add `node20`
 
 ## Mobile Testing Support
 - Mobile projects are enabled in `playwright.config.ts` (e.g., `Pixel 7`, `iPhone 13`).
