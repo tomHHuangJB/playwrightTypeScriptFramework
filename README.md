@@ -105,7 +105,7 @@ chmod +x .git/hooks/post-commit
 
 ### 2) Configure Jenkins target
 Defaults live in `scripts/trigger-jenkins.sh`:
-- Base URL: `http://localhost:9081`
+- Base URL: `http://localhost:9083` (update to match your Jenkins port)
 - Job name: `playwright-typescript-framework`
 
 Override with env vars as needed:
@@ -124,6 +124,12 @@ If the job needs parameters:
 ```bash
 export JENKINS_PARAMS="BASE_URL=http://localhost:5173"
 ```
+
+Or create a local env file (git-ignored) instead of exporting each time:
+```bash
+cp scripts/jenkins.env.example scripts/jenkins.env
+```
+Then edit `scripts/jenkins.env` with your Jenkins user + token.
 
 ### 3) Test the hook
 ```bash
