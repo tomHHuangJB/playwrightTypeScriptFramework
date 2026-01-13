@@ -94,6 +94,42 @@ rm -f ./local_automation_app_ci ./local_automation_app_ci.pub
 - CI runs the app and tests with `BASE_URL=http://localhost:5173`.
 - Tests can be skipped in CI by setting `SKIP_UI=true`.
 
+## Local Jenkins Trigger (post-commit)
+Local Jenkins can be triggered on every commit via a git hook.
+
+### 1) Copy the hook template
+```bash
+cp scripts/post-commit.example .git/hooks/post-commit
+chmod +x .git/hooks/post-commit
+```
+
+### 2) Configure Jenkins target
+Defaults live in `scripts/trigger-jenkins.sh`:
+- Base URL: `http://localhost:9081`
+- Job name: `playwright-typescript-framework`
+
+Override with env vars as needed:
+```bash
+export JENKINS_URL=http://localhost:9081
+export JENKINS_JOB=playwright-typescript-framework
+```
+
+If your Jenkins requires auth:
+```bash
+export JENKINS_USER=your_user
+export JENKINS_API_TOKEN=your_api_token
+```
+
+If the job needs parameters:
+```bash
+export JENKINS_PARAMS="BASE_URL=http://localhost:5173"
+```
+
+### 3) Test the hook
+```bash
+git commit --allow-empty -m "test hook"
+```
+
 ## Mobile Testing Support
 - Mobile projects are enabled in `playwright.config.ts` (e.g., `Pixel 7`, `iPhone 13`).
 - The app exposes mobile nav locators: `mobile-menu-button` and `mobile-nav-<label>` (for example, `mobile-nav-forms`).

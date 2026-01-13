@@ -7,3 +7,5 @@ playwright-report/
 .local-automation-pids
 local_automation_app_ci
 local_automation_app_ci.pub
+.DS_Store
+jenkins-home/
