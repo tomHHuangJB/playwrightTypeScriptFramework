@@ -141,8 +141,10 @@ docker rm -f jenkins-playwright
 docker run -d \
   --name jenkins-playwright \
   -p 9083:8080 \
+  -u root \
   -v "/Users/tomhuang/prog/playwrightTypeScriptFramework/jenkins-home:/var/jenkins_home" \
   -v "/Users/tomhuang/prog/playwrightTypeScriptFramework:/opt/playwright-repo" \
+  -v "/Users/tomhuang/prog/LocalAutomationApp:/opt/local-automation-app" \
   -e JAVA_OPTS='-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true' \
   jenkins/jenkins:lts-jdk21
 ```
@@ -152,9 +154,17 @@ Then set the Pipeline SCM repo URL to:
 file:///opt/playwright-repo
 ```
 
+The pipeline expects the LocalAutomationApp to be mounted at:
+```
+/opt/local-automation-app
+```
+
+Running Jenkins as root allows `npx playwright install --with-deps` to install
+system dependencies during the pipeline.
+
 ### NodeJS requirement (Jenkins local)
 The Jenkins container does not include Node by default. Install the **NodeJS**
-plugin and create a Node tool named `node20` so the Jenkinsfile can use it.
+plugin and create a Node tool named `node24` so the Jenkinsfile can use it.
 
 Steps:
 - Manage Jenkins → Manage Plugins → install **NodeJS**

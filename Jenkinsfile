@@ -3,17 +3,25 @@ pipeline {
   tools {
     nodejs 'node24'
   }
+  environment {
+    LOCAL_AUTOMATION_APP_DIR = '/opt/local-automation-app'
+  }
   stages {
     stage('Checkout') {
       steps {
         checkout scm
       }
     }
+    stage('Verify LocalAutomationApp') {
+      steps {
+        sh 'test -d "$LOCAL_AUTOMATION_APP_DIR"'
+      }
+    }
     stage('Install deps') {
       steps {
         sh 'node -v'
         sh 'npm ci'
-        sh 'npx playwright install'
+        sh 'npx playwright install --with-deps'
       }
     }
     stage('Run app') {
