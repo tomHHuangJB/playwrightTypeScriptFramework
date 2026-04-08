@@ -2,7 +2,9 @@
     "name": "playwright-typescript-framework",
     "private": true,
   "scripts": {
+    "browsers:install": "playwright install chromium firefox webkit",
     "test": "playwright test",
+    "test:desktop": "playwright test --project=chromium --project=firefox --project=webkit",
     "test:smoke": "playwright test --grep @smoke",
     "app:run": "bash scripts/run-local-app.sh"
   },

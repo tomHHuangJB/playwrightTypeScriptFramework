@@ -24,7 +24,22 @@ npm ci
 Note: after changing dependencies, run `npm install` once to update `package-lock.json`,
 then `npm ci` will work again.
 
-### 3) Run the app (same flow as CI)
+### 3) Install Playwright browsers
+Install the browser binaries used by the configured desktop projects:
+
+```bash
+npm run browsers:install
+```
+
+Equivalent raw command:
+```bash
+npx playwright install chromium firefox webkit
+```
+
+If Playwright is upgraded later, rerun the same install command so the local browser
+cache matches the Playwright version in `node_modules`.
+
+### 4) Run the app (same flow as CI)
 ```bash
 chmod +x scripts/run-local-app.sh
 npm run app:run
@@ -45,21 +60,29 @@ To stop:
 kill $(cat .local-automation-pids)
 ```
 
-### 4) Run tests
+### 5) Run tests
 ```bash
 npm test
 ```
+By default, local runs launch headed browsers so you can watch the test execution.
+In CI, Playwright runs headless automatically when the `CI` environment variable is set.
 
-### 4a) First-time Playwright install (local)
-If Playwright was just installed or updated, download browsers once:
+### 5a) Run only desktop browser projects
 ```bash
-npx playwright install
+npm run test:desktop
 ```
 
-### 4b) Full local run (lightweight)
+### 5b) First-time Playwright install (local)
+If Playwright was just installed or updated, download browsers once:
+```bash
+npm run browsers:install
+```
+
+### 5c) Full local run (lightweight)
 ```bash
 export LOCAL_AUTOMATION_APP_DIR=/Users/tomhuang/prog/LocalAutomationApp
 chmod +x scripts/run-local-app.sh
+npm run browsers:install
 npm run app:run
 PLAYWRIGHT_WORKERS=1 npm test
 ```
@@ -107,7 +130,10 @@ rm -f ./local_automation_app_ci ./local_automation_app_ci.pub
 
 ## Notes
 - CI runs the app and tests with `BASE_URL=http://localhost:5173`.
+- CI runs browsers headless because `playwright.config.ts` sets `headless` from `CI`.
+- Local runs are headed by default so browser activity is visible during development.
 - Tests can be skipped in CI by setting `SKIP_UI=true`.
+- `playwright.config.ts` currently defines desktop projects for `chromium`, `firefox`, and `webkit`, plus mobile emulation projects for `Pixel 7` and `iPhone 13`.
 
 ## Local Jenkins Trigger (post-commit)
 Local Jenkins can be triggered on every commit via a git hook.
@@ -194,6 +220,7 @@ Steps:
 
 ## Mobile Testing Support
 - Mobile projects are enabled in `playwright.config.ts` (e.g., `Pixel 7`, `iPhone 13`).
+- Mobile emulation still relies on the installed desktop browser engines, so `npm run browsers:install` should be completed before running the full matrix.
 - The app exposes mobile nav locators: `mobile-menu-button` and `mobile-nav-<label>` (for example, `mobile-nav-forms`).
 - The shared `Header` component handles both desktop and mobile navigation by:
   - Clicking `nav-forms` on desktop.
@@ -208,6 +235,7 @@ npx playwright test --project="Pixel 7" --project="iPhone 13"
 ```bash
 export LOCAL_AUTOMATION_APP_DIR=/Users/tomhuang/prog/LocalAutomationApp
 chmod +x scripts/run-local-app.sh
+npm run browsers:install
 npm run app:run
 npm test
 ```
